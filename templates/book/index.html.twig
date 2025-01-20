@@ -3,47 +3,46 @@
 {% block title %}Book list{% endblock %}
 
 {% block body %}
-    <h1>Book list</h1>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <h1>Knygų sąrašas</h1>
+            <a href="{{ path('app_book_new') }}" class="btn btn-primary">Pridėti naują knygą</a>
+        </div>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Year</th>
-                <th>ISBN</th>
-                <th>Apie</th>
-                <th>Nuotrauka</th>
-                <th>Actions</th>
-
-            </tr>
-        </thead>
-        <tbody>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for knyga in knygos %}
-            <tr>
-                <td>{{ knyga.id }}</td>
-                <td>{{ knyga.pavadinimas }}</td>
-                <td>{{ knyga.autorius }}</td>
-                <td>{{ knyga.isleidimoMetai }}</td>
-                <td>{{ knyga.ISBN }}</td>
-                <td>{{ knyga.Apie }}</td>
-                <td>{{ knyga.Nuotrauka }}</td>
-                <td>
-                    <a href="{{ path('app_book_edit', {'id': knyga.id}) }}">edit</a>
-                    <form method="post" action="{{ path('app_book_delete', {'id': knyga.id}) }}" style="display: inline;">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ knyga.id) }}">
-                        <button type="submit" onclick="return confirm('Are you sure?')">delete</button>
-                    </form>
-                </td>
-            </tr>
+            <div class="col">
+                <div class="card h-100">
+                    {% if knyga.nuotrauka %}
+                        <img src="..." class="card-img-top" alt="{{ knyga.pavadinimas }}">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-book" style="font-size: 2rem;"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ knyga.pavadinimas }}</h5>
+                        <p class="card-text">{{ knyga.autorius }}</p>
+                        <p class="card-text"><small class="text-muted">{{ knyga.isleidimoMetai }}</small></p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group w-100">
+                            <a href="{{ path('app_book_edit', {'id': knyga.id}) }}" class="btn btn-outline-primary">Redaguoti</a>
+                            <form method="post" action="{{ path('app_book_delete', {'id': knyga.id}) }}" style="display: inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ knyga.id) }}">
+                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Ar tikrai norite ištrinti?')">Ištrinti</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
+            <div class="col-12">
+                <p>Knygų nerasta</p>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_book_new') }}">Create new</a>
+    </div>
+</div>
 {% endblock %}
