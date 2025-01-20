@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Knygų sąrašas{% endblock %}
+{% block title %}Book list{% endblock %}
 
 {% block body %}
-    <h1>Knygų sąrašas</h1>
+    <h1>Book list</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Pavadinimas</th>
-                <th>Autorius</th>
-                <th>Išleidimo metai</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year</th>
                 <th>ISBN</th>
-                <th>Veiksmai</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -22,20 +22,23 @@
                 <td>{{ knyga.id }}</td>
                 <td>{{ knyga.pavadinimas }}</td>
                 <td>{{ knyga.autorius }}</td>
-                <td>{{ knyga.isleidimometai }}</td>
-                <td>{{ knyga.isbn }}</td>
+                <td>{{ knyga.isleidimoMetai }}</td>
+                <td>{{ knyga.ISBN }}</td>
                 <td>
-                    <a href="#">rodyti</a>
-                    <a href="#">redaguoti</a>
+                    <a href="{{ path('app_book_edit', {'id': knyga.id}) }}">edit</a>
+                    <form method="post" action="{{ path('app_book_delete', {'id': knyga.id}) }}" style="display: inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ knyga.id) }}">
+                        <button type="submit" onclick="return confirm('Are you sure?')">delete</button>
+                    </form>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">Knygų nerasta</td>
+                <td colspan="6">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="#">Pridėti naują knygą</a>
+    <a href="{{ path('app_book_new') }}">Create new</a>
 {% endblock %}
