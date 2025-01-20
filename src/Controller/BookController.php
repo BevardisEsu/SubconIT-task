@@ -10,11 +10,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/book')]
 #[IsGranted('ROLE_USER')]
 class BookController extends AbstractController
 {
+    private $bookCoversDirectory; 
+
+        #Setting directory for book covers upload
+    public function __construct(private SluggerInterface $slugger)
+    {
+        $this->bookCoversDirectory = 'uploads/covers/';
+    }
+        #Index logic
     #[Route('/', name: 'app_book_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -26,44 +37,93 @@ class BookController extends AbstractController
             'knygos' => $knygos,
         ]);
     }
+        #Routes for indexes
     #[Route('/new', name: 'app_book_new', methods: ['GET', 'POST'])]
     #[Route('/new', name: 'app_book_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $knyga = new Knyga();
-        $form = $this->createForm(BookType::class, $knyga);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($knyga);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_book_index');
+        #New book creation logic
+        #[Route('/new', name: 'app_book_new', methods: ['GET', 'POST'])]
+        public function new(Request $request, EntityManagerInterface $entityManager): Response
+        {
+            $knyga = new Knyga();
+            $form = $this->createForm(BookType::class, $knyga);
+            $form->handleRequest($request);
+    
+            if ($form->isSubmitted() && $form->isValid()) {
+                $coverFile = $form->get('nuotrauka')->getData();
+    
+                if ($coverFile) {
+                    $originalFilename = pathinfo($coverFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $this->slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$coverFile->guessExtension();
+    
+                    try {
+                        $coverFile->move(
+                            $this->getParameter('kernel.project_dir').'/public/'.$this->bookCoversDirectory,
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                        // ... handle exception if something happens during file upload
+                    }
+    
+                    $knyga->setNuotrauka($this->bookCoversDirectory.$newFilename);
+                }
+    
+                $entityManager->persist($knyga);
+                $entityManager->flush();
+    
+                return $this->redirectToRoute('app_book_index');
+            }
+    
+            return $this->render('book/new.html.twig', [
+                'form' => $form->createView(),
+            ]);
         }
-
-        return $this->render('book/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
+            #Edits logic
+        #[Route('/{id}/edit', name: 'app_book_edit', methods: ['GET', 'POST'])]
+        public function edit(Request $request, Knyga $knyga, EntityManagerInterface $entityManager): Response
+        {
+            $form = $this->createForm(BookType::class, $knyga);
+            $form->handleRequest($request);
     
-    #[Route('/{id}/edit', name: 'app_book_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Knyga $knyga, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(BookType::class, $knyga);
-        $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $coverFile = $form->get('nuotrauka')->getData();
+                
+                if ($coverFile) {
+                    $originalFilename = pathinfo($coverFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $this->slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$coverFile->guessExtension();
+                    var_dump($originalFilename); // Debug line
+                    var_dump($coverFile->getMimeType()); // Debug line
     
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+                    try {
+                        // Delete old file if exists
+                        if ($knyga->getNuotrauka()) {
+                            $oldFile = $this->getParameter('kernel.project_dir').'/public/'.$knyga->getNuotrauka();
+                            if (file_exists($oldFile)) {
+                                unlink($oldFile);
+                            }
+                        }
     
-            return $this->redirectToRoute('app_book_index');
-        }
+                        $coverFile->move(
+                            $this->getParameter('kernel.project_dir').'/public/'.$this->bookCoversDirectory,
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                    }
     
-        return $this->render('book/edit.html.twig', [
-            'knyga' => $knyga,
-            'form' => $form,
-        ]);
-    }
+                    $knyga->setNuotrauka($this->bookCoversDirectory.$newFilename);
+                }
     
+                $entityManager->flush();
+                return $this->redirectToRoute('app_book_index');
+            }
+    
+            return $this->render('book/edit.html.twig', [
+                'knyga' => $knyga,
+                'form' => $form,
+            ]);
+        }  
+            #Deletion of books
     #[Route('/{id}', name: 'app_book_delete', methods: ['POST'])]
     public function delete(Request $request, Knyga $knyga, EntityManagerInterface $entityManager): Response
     {

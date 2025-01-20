@@ -64,11 +64,6 @@ class Knyga
     private ?string $apie = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\File(
-        maxSize: '1024k',
-        mimeTypes: ['image/jpeg', 'image/png'],
-        mimeTypesMessage: 'Prašome įkelti tinkamo formato nuotrauką (JPEG arba PNG)'
-    )]
     private ?string $nuotrauka = null;
 
     public function getId(): ?int

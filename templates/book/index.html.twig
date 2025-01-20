@@ -15,13 +15,13 @@
         {% for knyga in knygos %}
             <div class="col">
                 <div class="card h-100">
-                    {% if knyga.nuotrauka %}
-                        <img src="..." class="card-img-top" alt="{{ knyga.pavadinimas }}">
-                    {% else %}
-                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                            <i class="bi bi-book" style="font-size: 2rem;"></i>
-                        </div>
-                    {% endif %}
+                        {% if knyga.nuotrauka %}
+                                <img src="{{ asset(knyga.nuotrauka) }}" class="card-img-top" alt="{{ knyga.pavadinimas }}">
+                            {% else %}
+                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <i class="bi bi-book" style="font-size: 2rem;"></i>
+                                </div>
+                        {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ knyga.pavadinimas }}</h5>
                         <p class="card-text">{{ knyga.autorius }}</p>

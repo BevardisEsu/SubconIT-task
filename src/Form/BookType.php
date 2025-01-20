@@ -50,21 +50,23 @@ class BookType extends AbstractType
             ])
             ->add('nuotrauka', FileType::class, [
                 'label' => 'Viršelio nuotrauka',
-                'required' => false,
                 'mapped' => false,
+                'required' => false,
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',
                         'mimeTypes' => [
                             'image/jpeg',
+                            'image/jpg',
                             'image/png',
                         ],
-                        'mimeTypesMessage' => 'Prašome įkelti tinkamo formato nuotrauką',
+                        'mimeTypesMessage' => 'Please upload a valid image file (JPEG, JPG, PNG)',
                     ])
-                ]
+                ],
             ])
         ;
     }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {
