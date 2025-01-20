@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\KnygaRepository;
+use App\Repository\BookRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: KnygaRepository::class)]
+#[ORM\Entity(repositoryClass: BookRepository::class)]
 class Knyga
 {
     #[ORM\Id]

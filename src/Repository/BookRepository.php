@@ -9,7 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<Knyga>
  */
-class KnygaRepository extends ServiceEntityRepository
+class BookRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

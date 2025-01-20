@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Knygų sąrašas{% endblock %}
+
+{% block body %}
+    <h1>Knygų sąrašas</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Pavadinimas</th>
+                <th>Autorius</th>
+                <th>Išleidimo metai</th>
+                <th>ISBN</th>
+                <th>Veiksmai</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for knyga in knygos %}
+            <tr>
+                <td>{{ knyga.id }}</td>
+                <td>{{ knyga.pavadinimas }}</td>
+                <td>{{ knyga.autorius }}</td>
+                <td>{{ knyga.isleidimometai }}</td>
+                <td>{{ knyga.isbn }}</td>
+                <td>
+                    <a href="#">rodyti</a>
+                    <a href="#">redaguoti</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Knygų nerasta</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="#">Pridėti naują knygą</a>
+{% endblock %}
