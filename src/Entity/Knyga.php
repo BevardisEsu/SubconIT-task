@@ -25,6 +25,12 @@ class Knyga
     #[ORM\Column(length: 13)]
     private ?string $ISBN = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $Apie = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nuotrauka = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +80,30 @@ class Knyga
     public function setISBN(string $ISBN): static
     {
         $this->ISBN = $ISBN;
+
+        return $this;
+    }
+
+    public function getApie(): ?string
+    {
+        return $this->Apie;
+    }
+
+    public function setApie(string $Apie): static
+    {
+        $this->Apie = $Apie;
+
+        return $this;
+    }
+
+    public function getNuotrauka(): ?string
+    {
+        return $this->nuotrauka;
+    }
+
+    public function setNuotrauka(?string $nuotrauka): static
+    {
+        $this->nuotrauka = $nuotrauka;
 
         return $this;
     }
