@@ -13,7 +13,10 @@
                 <th>Author</th>
                 <th>Year</th>
                 <th>ISBN</th>
+                <th>Apie</th>
+                <th>Nuotrauka</th>
                 <th>Actions</th>
+
             </tr>
         </thead>
         <tbody>
@@ -24,6 +27,8 @@
                 <td>{{ knyga.autorius }}</td>
                 <td>{{ knyga.isleidimoMetai }}</td>
                 <td>{{ knyga.ISBN }}</td>
+                <td>{{ knyga.Apie }}</td>
+                <td>{{ knyga.Nuotrauka }}</td>
                 <td>
                     <a href="{{ path('app_book_edit', {'id': knyga.id}) }}">edit</a>
                     <form method="post" action="{{ path('app_book_delete', {'id': knyga.id}) }}" style="display: inline;">

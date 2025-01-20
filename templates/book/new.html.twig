@@ -6,8 +6,14 @@
     <h1>Create new Book</h1>
 
     {{ form_start(form) }}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         {{ form_widget(form) }}
-        <button type="submit">Save</button>
+        <button type="submit">{{ button_label|default('Save') }}</button>
     {{ form_end(form) }}
 
     <a href="{{ path('app_book_index') }}">back to list</a>

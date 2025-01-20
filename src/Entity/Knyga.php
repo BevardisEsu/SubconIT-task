@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\BookRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,21 +15,60 @@ class Knyga
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Knygos pavadinimas negali būti tuščias')]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Pavadinimas turi būti bent {{ limit }} simbolių ilgio',
+        maxMessage: 'Pavadinimas negali būti ilgesnis nei {{ limit }} simbolių'
+    )]
     private ?string $pavadinimas = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Autoriaus vardas negali būti tuščias')]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Autoriaus vardas turi būti bent {{ limit }} simbolių ilgio',
+        maxMessage: 'Autoriaus vardas negali būti ilgesnis nei {{ limit }} simbolių'
+    )]
     private ?string $autorius = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Išleidimo metai negali būti tušti')]
+    #[Assert\Range(
+        min: 1000,
+        max: 2024,
+        notInRangeMessage: 'Išleidimo metai turi būti tarp {{ min }} ir {{ max }}'
+    )]
     private ?int $isleidimo_metai = null;
 
     #[ORM\Column(length: 13)]
+    #[Assert\NotBlank(message: 'ISBN negali būti tuščias')]
+    #[Assert\Length(
+        exactly: 13,
+        exactMessage: 'ISBN turi būti lygiai {{ limit }} simbolių'
+    )]
+    #[Assert\Regex(
+        pattern: '/^[0-9]{13}$/',
+        message: 'ISBN turi būti sudarytas tik iš 13 skaitmenų'
+    )]
     private ?string $ISBN = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $Apie = null;
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank(message: 'Aprašymas negali būti tuščias')]
+    #[Assert\Length(
+        min: 10,
+        minMessage: 'Aprašymas turi būti bent {{ limit }} simbolių ilgio'
+    )]
+    private ?string $apie = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\File(
+        maxSize: '1024k',
+        mimeTypes: ['image/jpeg', 'image/png'],
+        mimeTypesMessage: 'Prašome įkelti tinkamo formato nuotrauką (JPEG arba PNG)'
+    )]
     private ?string $nuotrauka = null;
 
     public function getId(): ?int
@@ -86,12 +126,12 @@ class Knyga
 
     public function getApie(): ?string
     {
-        return $this->Apie;
+        return $this->apie;
     }
 
     public function setApie(string $Apie): static
     {
-        $this->Apie = $Apie;
+        $this->apie = $Apie;
 
         return $this;
     }

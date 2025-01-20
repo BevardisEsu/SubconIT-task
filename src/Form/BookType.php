@@ -7,11 +7,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\File;
 
 class BookType extends AbstractType
 {
@@ -19,41 +18,50 @@ class BookType extends AbstractType
     {
         $builder
             ->add('pavadinimas', TextType::class, [
-                'constraints' => [
-                    new NotBlank(['message' => 'Pavadinimas negali būti tuščias']),
+                'label' => 'Pavadinimas',
+                'attr' => [
+                    'placeholder' => 'Įveskite knygos pavadinimą'
                 ]
             ])
             ->add('autorius', TextType::class, [
-                'constraints' => [
-                    new NotBlank(['message' => 'Autorius negali būti tuščias']),
+                'label' => 'Autorius',
+                'attr' => [
+                    'placeholder' => 'Įveskite autoriaus vardą'
                 ]
             ])
             ->add('isleidimo_metai', IntegerType::class, [
-                'constraints' => [
-                    new NotBlank(['message' => 'Išleidimo metai negali būti tušti']),
+                'label' => 'Išleidimo metai',
+                'attr' => [
+                    'placeholder' => 'Įveskite išleidimo metus'
                 ]
             ])
             ->add('ISBN', TextType::class, [
-                'constraints' => [
-                    new NotBlank(['message' => 'ISBN negali būti tuščias']),
-                    new Length([
-                        'min' => 13,
-                        'max' => 13,
-                        'exactMessage' => 'ISBN turi būti 13 simbolių ilgio'
-                    ]),
-                    new Regex([
-                        'pattern' => '/^[0-9]{13}$/',
-                        'message' => 'ISBN turi būti sudarytas tik iš skaičių'
-                    ])
+                'label' => 'ISBN',
+                'attr' => [
+                    'placeholder' => 'Įveskite 13 skaitmenų ISBN'
                 ]
             ])
             ->add('apie', TextareaType::class, [
-                'constraints' => [
-                    new NotBlank(['message' => 'Aprašymas negali būti tuščias']),
+                'label' => 'Aprašymas',
+                'attr' => [
+                    'placeholder' => 'Įveskite knygos aprašymą',
+                    'rows' => 5
                 ]
             ])
-            ->add('nuotrauka', TextType::class, [
-                'required' => false
+            ->add('nuotrauka', FileType::class, [
+                'label' => 'Viršelio nuotrauka',
+                'required' => false,
+                'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Prašome įkelti tinkamo formato nuotrauką',
+                    ])
+                ]
             ])
         ;
     }
