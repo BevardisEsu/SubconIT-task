@@ -16,6 +16,7 @@ class BookType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /* Validation for Book fields */
         $builder
             ->add('pavadinimas', TextType::class, [
                 'label' => 'Pavadinimas',

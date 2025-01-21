@@ -25,7 +25,10 @@ class BookController extends AbstractController
     {
         $this->bookCoversDirectory = 'uploads/covers/';
     }
-        #Index logic
+    /**
+     * Display all books with search and filter functionality
+     * Handles filtering by title, author, ISBN and year range
+     */
         #[Route('/', name: 'app_book_index', methods: ['GET'])]
         public function index(Request $request, EntityManagerInterface $entityManager): Response
         {
@@ -42,7 +45,6 @@ class BookController extends AbstractController
                     ->orWhere('k.ISBN LIKE :search')
                     ->setParameter('search', '%'.$searchTerm.'%');
             }
-        
             if ($yearFrom) {
                 $queryBuilder
                     ->andWhere('k.isleidimo_metai >= :yearFrom')
@@ -67,7 +69,10 @@ class BookController extends AbstractController
         #Routes for new and edits
     #[Route('/new', name: 'app_book_new', methods: ['GET', 'POST'])]
     #[Route('/new', name: 'app_book_new', methods: ['GET', 'POST'])]
-        #New book creation logic
+           /**
+     * Create new book entry with image upload functionality
+     * Handles file upload
+     */
         #[Route('/new', name: 'app_book_new', methods: ['GET', 'POST'])]
         public function new(Request $request, EntityManagerInterface $entityManager): Response
         {
@@ -89,7 +94,7 @@ class BookController extends AbstractController
                             $newFilename
                         );
                     } catch (FileException $e) {
-                        // ... handle exception if something happens during file upload
+                        // Exception catching
                     }
     
                     $knyga->setNuotrauka($this->bookCoversDirectory.$newFilename);
@@ -105,7 +110,10 @@ class BookController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }
-            #Edits logic
+             /**
+             * Edit existing book details and cover image
+             * Handles updating image by removing old one and uploading new
+             */
         #[Route('/{id}/edit', name: 'app_book_edit', methods: ['GET', 'POST'])]
         public function edit(Request $request, Knyga $knyga, EntityManagerInterface $entityManager): Response
         {
@@ -150,17 +158,20 @@ class BookController extends AbstractController
                 'form' => $form,
             ]);
         }  
-            #Deletion of books
-    #[Route('/{id}', name: 'app_book_delete', methods: ['POST'])]
-    public function delete(Request $request, Knyga $knyga, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$knyga->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($knyga);
-            $entityManager->flush();
-        }
-    
-        return $this->redirectToRoute('app_book_index');
-    }
+        /**
+        * Delete book entry and associated image
+        * Validates CSRF token before deletion
+        */
+            #[Route('/{id}', name: 'app_book_delete', methods: ['POST'])]
+            public function delete(Request $request, Knyga $knyga, EntityManagerInterface $entityManager): Response
+            {
+                if ($this->isCsrfTokenValid('delete'.$knyga->getId(), $request->request->get('_token'))) {
+                    $entityManager->remove($knyga);
+                    $entityManager->flush();
+                }
+            
+                return $this->redirectToRoute('app_book_index');
+            }
 
-    
+            
 }

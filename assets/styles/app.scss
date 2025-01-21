@@ -4,7 +4,7 @@
     position: relative;
     overflow: hidden;
 }
-
+// Overlay effect for book description
 .book-overlay {
     position: absolute;
     top: 0;
@@ -18,7 +18,7 @@
     transition: all 0.3s ease;
     pointer-events: none;
 }
-
+// Show overlay on hover
 .book-card:hover .book-overlay {
     opacity: 1;
     pointer-events: auto;
@@ -33,7 +33,7 @@
     font-size: 0.9rem;
     line-height: 1.4;
 }
-
+// Ensure footer stays above overlay
 .card-footer {
     position: relative;
     z-index: 2;

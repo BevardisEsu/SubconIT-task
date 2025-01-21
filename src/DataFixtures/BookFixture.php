@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class BookFixture extends Fixture
 {
+    /* Fake data for database*/
     public function load(ObjectManager $manager): void
     {
         $book1 = new Knyga();

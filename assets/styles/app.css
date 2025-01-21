@@ -1,33 +1,3 @@
 body {
     background-color: skyblue;
 }
-/* Card container styles */
-.row {
-    align-items: stretch;
-    min-height: 100%;
-}
-
-.card {
-    height: 100%;  /* Make all cards full height */
-}
-
-/* Image specific styles */
-.book-edit-image {
-    width: 100%;
-    height: 100% !important;
-    object-fit: cover;
-    max-height: none !important;  /* Remove any max-height restrictions */
-    border-radius: 8px;
-}
-
-/* Left column card specific */
-.col-md-4 .card {
-    height: 100%;
-    padding: 0;
-    overflow: hidden;
-}
-
-/* Right column card specific */
-.col-md-8 .card {
-    height: 100%;
-}
