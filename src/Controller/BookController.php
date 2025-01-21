@@ -26,18 +26,45 @@ class BookController extends AbstractController
         $this->bookCoversDirectory = 'uploads/covers/';
     }
         #Index logic
-    #[Route('/', name: 'app_book_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
-    {
-        $knygos = $entityManager
-            ->getRepository(Knyga::class)
-            ->findAll();
-
-        return $this->render('book/index.html.twig', [
-            'knygos' => $knygos,
-        ]);
-    }
-        #Routes for indexes
+        #[Route('/', name: 'app_book_index', methods: ['GET'])]
+        public function index(Request $request, EntityManagerInterface $entityManager): Response
+        {
+            $searchTerm = $request->query->get('search');
+            $yearFrom = $request->query->get('yearFrom');
+            $yearTo = $request->query->get('yearTo');
+        
+            $queryBuilder = $entityManager->getRepository(Knyga::class)->createQueryBuilder('k');
+        
+            if ($searchTerm) {
+                $queryBuilder
+                    ->where('k.pavadinimas LIKE :search')
+                    ->orWhere('k.autorius LIKE :search')
+                    ->orWhere('k.ISBN LIKE :search')
+                    ->setParameter('search', '%'.$searchTerm.'%');
+            }
+        
+            if ($yearFrom) {
+                $queryBuilder
+                    ->andWhere('k.isleidimo_metai >= :yearFrom')
+                    ->setParameter('yearFrom', $yearFrom);
+            }
+        
+            if ($yearTo) {
+                $queryBuilder
+                    ->andWhere('k.isleidimo_metai <= :yearTo')
+                    ->setParameter('yearTo', $yearTo);
+            }
+        
+            $knygos = $queryBuilder->getQuery()->getResult();
+        
+            return $this->render('book/index.html.twig', [
+                'knygos' => $knygos,
+                'searchTerm' => $searchTerm,
+                'yearFrom' => $yearFrom,
+                'yearTo' => $yearTo,
+            ]);
+        }
+        #Routes for new and edits
     #[Route('/new', name: 'app_book_new', methods: ['GET', 'POST'])]
     #[Route('/new', name: 'app_book_new', methods: ['GET', 'POST'])]
         #New book creation logic
@@ -134,4 +161,6 @@ class BookController extends AbstractController
     
         return $this->redirectToRoute('app_book_index');
     }
+
+    
 }

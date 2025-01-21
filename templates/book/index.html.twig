@@ -3,6 +3,31 @@
 {% block title %}Book list{% endblock %}
 
 {% block body %}
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Paieška pagal autorių, ISBN" value="{{ searchTerm ?? '' }}">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <input type="number" name="yearFrom" class="form-control" placeholder="Metai nuo" value="{{ yearFrom ?? '' }}">
+            </div>
+            <div class="col-md-2">
+                <input type="number" name="yearTo" class="form-control" placeholder="Metai iki" value="{{ yearTo ?? '' }}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Paieška</button>
+            </div>
+            {% if searchTerm or yearFrom or yearTo %}
+                <div class="col-12">
+                    <a href="{{ path('app_book_index') }}" class="btn btn-outline-secondary">Išvalyti filtrus</a>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     {% for knyga in knygos %}
         <div class="col">

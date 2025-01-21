@@ -1,6 +1,6 @@
 {% extends 'base_bootstrap.html.twig' %}
 
-{% block title %}Edit Book{% endblock %}
+{% block title %}Knygos redagavimas{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -18,24 +18,24 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
-                <h1 class="card-title mb-0">Edit "{{ knyga.pavadinimas }}"</h1>
+                <h1 class="card-title mb-0">Redaguoti "{{ knyga.pavadinimas }}"</h1>
             </div>
             <div class="card-body">
                 {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
                     <div class="mb-3">
-                        {{ form_label(form.pavadinimas, 'Title', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_label(form.pavadinimas, 'Knygos Pavadinimas', {'label_attr': {'class': 'form-label'}}) }}
                         {{ form_widget(form.pavadinimas, {'attr': {'class': 'form-control'}}) }}
                         {{ form_errors(form.pavadinimas) }}
                     </div>
 
                     <div class="mb-3">
-                        {{ form_label(form.autorius, 'Author', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_label(form.autorius, 'Autorius', {'label_attr': {'class': 'form-label'}}) }}
                         {{ form_widget(form.autorius, {'attr': {'class': 'form-control'}}) }}
                         {{ form_errors(form.autorius) }}
                     </div>
 
                     <div class="mb-3">
-                        {{ form_label(form.isleidimo_metai, 'Publication Year', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_label(form.isleidimo_metai, 'Išleidimo metai', {'label_attr': {'class': 'form-label'}}) }}
                         {{ form_widget(form.isleidimo_metai, {'attr': {'class': 'form-control'}}) }}
                         {{ form_errors(form.isleidimo_metai) }}
                     </div>
@@ -47,20 +47,20 @@
                     </div>
 
                     <div class="mb-3">
-                        {{ form_label(form.apie, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_label(form.apie, 'Aprašymas', {'label_attr': {'class': 'form-label'}}) }}
                         {{ form_widget(form.apie, {'attr': {'class': 'form-control', 'rows': '5'}}) }}
                         {{ form_errors(form.apie) }}
                     </div>
 
                     <div class="mb-3">
-                        {{ form_label(form.nuotrauka, 'Cover Image', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_label(form.nuotrauka, 'Viršelio nuotrauka', {'label_attr': {'class': 'form-label'}}) }}
                         {{ form_widget(form.nuotrauka, {'attr': {'class': 'form-control'}}) }}
                         {{ form_errors(form.nuotrauka) }}
                     </div>
 
                     <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-primary">Update</button>
-                        <a href="{{ path('app_book_index') }}" class="btn btn-outline-secondary">Back to list</a>
+                        <button type="submit" class="btn btn-primary">Atnaujinti</button>
+                        <a href="{{ path('app_book_index') }}" class="btn btn-outline-secondary">Atgal į sąrašą</a>
                     </div>
                 {{ form_end(form) }}
             </div>

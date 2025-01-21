@@ -72,3 +72,19 @@
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
+
+.search-form {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.input-group {
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.form-control::placeholder {
+    color: #adb5bd;
+}
