@@ -1,20 +1,99 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_bootstrap.html.twig' %}
 
 {% block title %}New Book{% endblock %}
 
 {% block body %}
-    <h1>Create new Book</h1>
-
-    {{ form_start(form) }}
-        {% for message in app.flashes('error') %}
-            <div class="alert alert-danger">
-                {{ message }}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                <i class="bi bi-book" style="font-size: 3rem; color: #a4c5cc;"></i>
             </div>
-        {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title mb-0">Add New Book</h1>
+            </div>
+            <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.querySelector('input[type="file"]');
+    const previewContainer = document.querySelector('.card-img-top');
+    
+    imageInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // If there's an icon, remove it
+                const existingIcon = previewContainer.querySelector('i');
+                if (existingIcon) {
+                    existingIcon.remove();
+                }
+                
+                // If there's an existing image, update its src
+                let img = previewContainer.querySelector('img');
+                if (!img) {
+                    img = document.createElement('img');
+                    img.style.height = '400px';
+                    img.style.width = '100%';
+                    img.style.objectFit = 'cover';
+                    previewContainer.appendChild(img);
+                }
+                img.src = e.target.result;
+                previewContainer.className = 'card-img-top';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
+</script>
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+                    <div class="mb-3">
+                        {{ form_label(form.pavadinimas, 'Title', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.pavadinimas, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.pavadinimas) }}
+                    </div>
 
-        {{ form_widget(form) }}
-        <button type="submit">{{ button_label|default('Save') }}</button>
-    {{ form_end(form) }}
+                    <div class="mb-3">
+                        {{ form_label(form.autorius, 'Author', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.autorius, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.autorius) }}
+                    </div>
 
-    <a href="{{ path('app_book_index') }}">back to list</a>
+                    <div class="mb-3">
+                        {{ form_label(form.isleidimo_metai, 'Publication Year', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.isleidimo_metai, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.isleidimo_metai) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.ISBN, 'ISBN', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.ISBN, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.ISBN) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.apie, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.apie, {'attr': {'class': 'form-control', 'rows': '5'}}) }}
+                        {{ form_errors(form.apie) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.nuotrauka, 'Cover Image', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.nuotrauka, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.nuotrauka) }}
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <a href="{{ path('app_book_index') }}" class="btn btn-outline-secondary">Back to list</a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
