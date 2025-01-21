@@ -1,1 +1,40 @@
-@import "bootstrap/scss/bootstrap";
+@use 'bootstrap/scss/bootstrap';
+
+.book-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.book-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.book-card:hover .book-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.overlay-title {
+    margin-bottom: 15px;
+    color: white;
+}
+
+.overlay-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.card-footer {
+    position: relative;
+    z-index: 2;
+}
